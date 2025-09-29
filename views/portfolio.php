@@ -121,21 +121,33 @@
         }
 
         /* Mobile Nav */
+        .mobile-top-bar {
+            display: none; /* Hidden on desktop */
+        }
         .mobile-nav-toggle {
             display: none;
-            position: fixed;
-            top: 15px;
-            right: 15px;
-            z-index: 1000;
-            background: var(--primary-color);
+            background: transparent;
             color: white;
             border: none;
             padding: 10px;
-            border-radius: 50%;
             cursor: pointer;
+            z-index: 1000;
         }
 
         @media (max-width: 992px) {
+            .mobile-top-bar {
+                display: flex;
+                justify-content: flex-end;
+                align-items: center;
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 60px;
+                background-color: var(--primary-color);
+                z-index: 998;
+                padding: 0 15px;
+            }
             .sidebar {
                 transform: translateX(-100%);
                 z-index: 999;
@@ -145,6 +157,7 @@
             }
             .main-content {
                 margin-left: 0;
+                padding-top: 60px; /* Push content down */
             }
             .mobile-nav-toggle {
                 display: block;
@@ -403,10 +416,12 @@
         </ul>
     </nav>
 
-    <!-- Mobile Nav Toggle -->
-    <button class="mobile-nav-toggle" id="mobile-nav-toggle">
-        <i data-feather="menu"></i>
-    </button>
+    <!-- Mobile Top Bar -->
+    <div class="mobile-top-bar">
+        <button class="mobile-nav-toggle" id="mobile-nav-toggle">
+            <i data-feather="menu"></i>
+        </button>
+    </div>
 
     <div class="main-content">
 
