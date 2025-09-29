@@ -1,0 +1,18 @@
+# Main .htaccess file for URL rewriting and directing traffic to the public folder.
+
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    # Redirect all traffic to the public directory, which is the main web root.
+    # This is a security best practice to prevent direct web access to application files.
+    RewriteRule ^$ public/ [L]
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteCond %{REQUEST_URI} !^/public/
+    RewriteRule ^(.*)$ public/$1 [L]
+
+</IfModule>
+
+# You may also want to add other security headers or configurations here in a production environment.
+# For example, to prevent directory listing:
+Options -Indexes
