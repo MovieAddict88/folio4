@@ -40,8 +40,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $image_type = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
             if (in_array($image_type, ['jpg', 'jpeg', 'png', 'gif'])) {
                 if (move_uploaded_file($_FILES['hero_image']['tmp_name'], $target_file)) {
-                    // Update database with new image path
-                    $image_path = 'public/uploads/' . $filename;
+                    // Update database with new image path, relative to public dir
+                    $image_path = 'uploads/' . $filename;
                     $stmt->execute([$image_path, 'hero_image']);
                 }
             }
@@ -82,7 +82,16 @@ function get_setting($key) {
     <div class="form-group">
         <label for="hero_image">Hero Image (Profile Picture)</label>
         <input type="file" id="hero_image" name="hero_image">
-        <small>Current image: <?php echo get_setting('hero_image'); ?></small>
+        <?php
+        $current_image = get_setting('hero_image');
+        if ($current_image && file_exists(__DIR__ . '/../../public/' . $current_image)): ?>
+            <div style="margin-top: 10px;">
+                <img src="<?php echo '../public/' . $current_image; ?>" alt="Current Profile Image" style="max-width: 150px; height: auto; border-radius: 5px;">
+                <p><small>Current image: <?php echo $current_image; ?></small></p>
+            </div>
+        <?php else: ?>
+            <p><small>No image uploaded.</small></p>
+        <?php endif; ?>
     </div>
 
     <hr style="margin: 30px 0;">

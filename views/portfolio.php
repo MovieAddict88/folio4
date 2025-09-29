@@ -76,6 +76,29 @@
             border-radius: 50%;
             object-fit: cover;
             border: 4px solid var(--secondary-color);
+            background-color: var(--card-bg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .sidebar-profile-pic i {
+            width: 60px;
+            height: 60px;
+            color: var(--primary-color);
+        }
+        .about-image-placeholder {
+            width: 100%;
+            min-height: 250px;
+            background: #f3f4f6;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #9ca3af;
+        }
+        .about-image-placeholder i {
+            width: 50px;
+            height: 50px;
         }
         .sidebar-nav {
             list-style: none;
@@ -352,7 +375,16 @@
 
     <!-- Sidebar -->
     <nav class="sidebar" id="sidebar">
-        <img src="<?php echo get_setting('hero_image'); ?>" alt="Profile Picture" class="sidebar-profile-pic">
+        <?php
+        $hero_image = get_setting('hero_image');
+        // Check if image exists from the public directory
+        if ($hero_image && file_exists($hero_image)): ?>
+            <img src="<?php echo e($hero_image); ?>" alt="Profile Picture" class="sidebar-profile-pic">
+        <?php else: ?>
+            <div class="sidebar-profile-pic">
+                <i data-feather="user"></i>
+            </div>
+        <?php endif; ?>
         <ul class="sidebar-nav">
             <li><a href="#home">Home</a></li>
             <li><a href="#about">About Me</a></li>
@@ -394,7 +426,13 @@
                     <p><?php echo nl2br(get_setting('education_philosophy')); ?></p>
                 </div>
                 <div class="about-image">
-                     <img src="<?php echo get_setting('hero_image'); ?>" alt="Profile Picture">
+                     <?php if ($hero_image && file_exists($hero_image)): ?>
+                        <img src="<?php echo e($hero_image); ?>" alt="Profile Picture">
+                    <?php else: ?>
+                        <div class="about-image-placeholder">
+                            <i data-feather="image"></i>
+                        </div>
+                    <?php endif; ?>
                 </div>
             </div>
         </section>

@@ -47,7 +47,7 @@ CREATE TABLE `profile` (
 INSERT INTO `profile` (`setting_key`, `setting_value`) VALUES
 ('hero_title', 'Your Name'),
 ('hero_tagline', 'Your Professional Tagline'),
-('hero_image', 'public/uploads/profile.jpg'),
+('hero_image', ''),
 ('about_me', 'A brief biography about yourself.'),
 ('education_philosophy', 'Your teaching or work philosophy.'),
 ('contact_email', 'your.email@example.com'),
