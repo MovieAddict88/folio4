@@ -39,7 +39,7 @@ define('DB_PASS', '{$db_pass}');
 
 // Site Configuration
 define('SITE_URL', 'http://' . \$_SERVER['HTTP_HOST']);
-define('APP_PATH', __DIR__);
+define('APP_ROOT', dirname(__DIR__)); // The absolute path to the project's root directory
 
 // Password for downloads
 define('DOWNLOAD_ENCRYPTION_KEY', 'your-secret-encryption-key'); // You should change this

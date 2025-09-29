@@ -29,7 +29,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         // Handle file upload for hero image
         if (isset($_FILES['hero_image']) && $_FILES['hero_image']['error'] === UPLOAD_ERR_OK) {
-            $upload_dir = __DIR__ . '/../../public/uploads/';
+            $upload_dir = APP_ROOT . '/public/uploads/';
             if (!is_dir($upload_dir)) {
                 mkdir($upload_dir, 0755, true);
             }
@@ -40,7 +40,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $image_type = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
             if (in_array($image_type, ['jpg', 'jpeg', 'png', 'gif'])) {
                 if (move_uploaded_file($_FILES['hero_image']['tmp_name'], $target_file)) {
-                    // Update database with new image path, relative to public dir
+                    // Update database with new image path, relative to the public directory
                     $image_path = 'uploads/' . $filename;
                     $stmt->execute([$image_path, 'hero_image']);
                 }
@@ -84,9 +84,9 @@ function get_setting($key) {
         <input type="file" id="hero_image" name="hero_image">
         <?php
         $current_image = get_setting('hero_image');
-        if ($current_image && file_exists(__DIR__ . '/../../public/' . $current_image)): ?>
+        if ($current_image && file_exists(APP_ROOT . '/public/' . $current_image)): ?>
             <div style="margin-top: 10px;">
-                <img src="<?php echo '../public/' . $current_image; ?>" alt="Current Profile Image" style="max-width: 150px; height: auto; border-radius: 5px;">
+                <img src="<?php echo e($current_image); ?>" alt="Current Profile Image" style="max-width: 150px; height: auto; border-radius: 5px;">
                 <p><small>Current image: <?php echo $current_image; ?></small></p>
             </div>
         <?php else: ?>

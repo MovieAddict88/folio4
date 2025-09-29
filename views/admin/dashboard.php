@@ -1,17 +1,10 @@
 <?php
 // This is the main dashboard view.
-// We can add logic here to fetch summary data, like counts of projects, messages, etc.
-
-// For now, it will be a welcome message and a set of quick links.
-
-// Example of how you might fetch data in the future:
-// require_once __DIR__ . '/../../app/database.php';
-// $project_count = pdo()->query("SELECT COUNT(*) FROM projects")->fetchColumn();
-// $message_count = pdo()->query("SELECT COUNT(*) FROM contact_messages")->fetchColumn();
-
-$project_count = 0; // Placeholder
-$message_count = 0; // Placeholder
-$testimonial_count = 0; // Placeholder
+// Fetch summary data for the dashboard cards.
+$pdo = pdo();
+$project_count = $pdo->query("SELECT COUNT(*) FROM projects")->fetchColumn();
+$message_count = $pdo->query("SELECT COUNT(*) FROM contact_messages")->fetchColumn();
+$testimonial_count = $pdo->query("SELECT COUNT(*) FROM testimonials")->fetchColumn();
 ?>
 
 <style>

@@ -196,14 +196,19 @@
         /* About Section */
         #about .about-content {
             display: flex;
-            gap: 50px;
+            flex-direction: column;
+            gap: 25px;
             align-items: center;
+            text-align: center;
         }
-        #about .about-text { flex: 2; }
-        #about .about-image { flex: 1; text-align: center; }
+        #about .about-text { max-width: 700px; margin-top: 15px; }
+        #about .about-image { }
         #about .about-image img {
-            max-width: 100%;
-            border-radius: 8px;
+            width: 180px;
+            height: 180px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid var(--secondary-color);
         }
 
         /* Education & Experience Timeline */
@@ -420,11 +425,6 @@
                 <h2>About Me</h2>
             </div>
             <div class="card about-content">
-                <div class="about-text">
-                    <h3>Bio & Philosophy</h3>
-                    <p><?php echo nl2br(get_setting('about_me')); ?></p>
-                    <p><?php echo nl2br(get_setting('education_philosophy')); ?></p>
-                </div>
                 <div class="about-image">
                      <?php if ($hero_image && file_exists($hero_image)): ?>
                         <img src="<?php echo e($hero_image); ?>" alt="Profile Picture">
@@ -433,6 +433,11 @@
                             <i data-feather="image"></i>
                         </div>
                     <?php endif; ?>
+                </div>
+                <div class="about-text">
+                    <h3>Bio & Philosophy</h3>
+                    <p><?php echo nl2br(get_setting('about_me')); ?></p>
+                    <p><?php echo nl2br(get_setting('education_philosophy')); ?></p>
                 </div>
             </div>
         </section>

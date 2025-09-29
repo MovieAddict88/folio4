@@ -26,7 +26,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // Handle image uploads
         $image_album = $_POST['existing_images'] ? json_decode($_POST['existing_images'], true) : [];
         if (isset($_FILES['image_album']) && !empty($_FILES['image_album']['name'][0])) {
-            $upload_dir = __DIR__ . '/../../public/uploads/projects/';
+            $upload_dir = APP_ROOT . '/public/uploads/projects/';
             if (!is_dir($upload_dir)) {
                 mkdir($upload_dir, 0755, true);
             }
@@ -35,7 +35,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $filename = time() . '_' . basename($_FILES['image_album']['name'][$key]);
                 $target_file = $upload_dir . $filename;
                 if (move_uploaded_file($tmp_name, $target_file)) {
-                    $image_album[] = 'public/uploads/projects/' . $filename;
+                    $image_album[] = 'uploads/projects/' . $filename;
                 }
             }
         }
@@ -63,8 +63,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if ($album_json) {
                 $album_files = json_decode($album_json, true);
                 foreach ($album_files as $file) {
-                    if (file_exists(__DIR__ . '/../../' . $file)) {
-                        unlink(__DIR__ . '/../../' . $file);
+                    $full_path = APP_ROOT . '/public/' . $file;
+                    if (file_exists($full_path)) {
+                        unlink($full_path);
                     }
                 }
             }
@@ -107,11 +108,26 @@ $items = $pdo->query("SELECT id, title, category_tags FROM projects ORDER BY id 
     <div class="form-group">
         <label for="image_album">Image Album (can select multiple)</label>
         <input type="file" id="image_album" name="image_album[]" multiple>
-        <?php if (!empty($edit_item['image_album'])):
-            $current_images = json_decode($edit_item['image_album'], true); ?>
-            <p>Current images: <?php echo e(count($current_images)); ?> uploaded. (Uploading new files will add to the album).</p>
-            <input type="hidden" name="existing_images" value='<?php echo e($edit_item['image_album']); ?>'>
-        <?php endif; ?>
+        <?php
+        $current_images = [];
+        if (!empty($edit_item['image_album'])) {
+            $current_images = json_decode($edit_item['image_album'], true);
+        }
+        ?>
+        <div class="image-previews" style="display: flex; flex-wrap: wrap; gap: 10px; margin-top: 10px;">
+            <?php if (!empty($current_images)): ?>
+                <?php foreach ($current_images as $image_path): ?>
+                    <?php if (file_exists(APP_ROOT . '/public/' . $image_path)): ?>
+                    <div class="preview-container">
+                        <img src="<?php echo e($image_path); ?>" style="width: 100px; height: 100px; object-fit: cover; border-radius: 5px;">
+                        <a href="#" class="remove-image" data-path="<?php echo e($image_path); ?>" style="color: red; text-decoration: none; display: block; text-align: center;">Remove</a>
+                    </div>
+                    <?php endif; ?>
+                <?php endforeach; ?>
+            <?php endif; ?>
+        </div>
+        <input type="hidden" name="existing_images" id="existing_images_input" value='<?php echo e($edit_item['image_album'] ?? '[]'); ?>'>
+        <p><small>Uploading new files will add to the album. Use "Remove" to delete existing images before saving.</small></p>
     </div>
     <div class="form-group">
         <label for="external_link">External Link (e.g., GitHub, Live Demo)</label>
@@ -132,6 +148,28 @@ $items = $pdo->query("SELECT id, title, category_tags FROM projects ORDER BY id 
 
 <!-- Table of Existing Projects -->
 <h3>Manage Projects</h3>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const removeImageLinks = document.querySelectorAll('.remove-image');
+    const existingImagesInput = document.getElementById('existing_images_input');
+
+    removeImageLinks.forEach(link => {
+        link.addEventListener('click', function(e) {
+            e.preventDefault();
+            const imagePathToRemove = this.getAttribute('data-path');
+            const previewContainer = this.parentElement;
+
+            // Remove the image from the DOM
+            previewContainer.style.display = 'none';
+
+            // Update the hidden input value
+            let currentImages = JSON.parse(existingImagesInput.value);
+            let updatedImages = currentImages.filter(path => path !== imagePathToRemove);
+            existingImagesInput.value = JSON.stringify(updatedImages);
+        });
+    });
+});
+</script>
 <table>
     <thead>
         <tr>
