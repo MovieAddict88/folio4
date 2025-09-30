@@ -1,0 +1,23 @@
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.hero-section {
+    background: linear-gradient(to right, #6a11cb, #2575fc);
+    padding: 100px 0;
+}
+
+.profile-picture {
+    width: 150px;
+    height: 150px;
+    border: 5px solid #fff;
+    box-shadow: 0 0 20px rgba(0,0,0,0.2);
+}
+
+.card {
+    transition: transform 0.3s;
+}
+
+.card:hover {
+    transform: translateY(-10px);
+}
